@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TV represents the TV. It contains the websocket connection, necessary channels
+// used for communication and methods used for interaction with the TV.
 type TV struct {
 	ws      *websocket.Conn
 	wsMutex sync.Mutex
@@ -18,8 +20,9 @@ type TV struct {
 	resMutex sync.Mutex
 }
 
+// NewTV dials the socket and returns a pointer to a new TV.
 func NewTV(dialer *websocket.Dialer, addr string) (*TV, error) {
-	ws, resp, err := dialer.Dial(fmt.Sprintf("ws://%s:3000", addr), nil)
+	ws, resp, err := dialer.Dial(fmt.Sprintf("wss://%s:3001", addr), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -31,6 +34,7 @@ func NewTV(dialer *websocket.Dialer, addr string) (*TV, error) {
 	return &TV{ws: ws}, nil
 }
 
+// Command executes a Command on the TV.
 func (tv *TV) Command(uri Command, req Payload) (Message, error) {
 	return tv.request(&Message{
 		Type:    RequestMessageType,
@@ -40,6 +44,9 @@ func (tv *TV) Command(uri Command, req Payload) (Message, error) {
 	})
 }
 
+// MessageHandler listens to the TVs websocket and reads responses.
+// Responses are read into a Message type and added to appropriate channel
+// based on the Message.ID.
 func (tv *TV) MessageHandler() (err error) {
 	defer func() {
 		tv.resMutex.Lock()
@@ -75,6 +82,7 @@ func (tv *TV) MessageHandler() (err error) {
 	}
 }
 
+// AuthoriseClientKey autorises with the TV using an existing client key.
 func (tv *TV) AuthoriseClientKey(key string) error {
 	msg := Message{
 		Type:    RegisterMessageType,
@@ -94,6 +102,7 @@ func (tv *TV) AuthoriseClientKey(key string) error {
 	return nil
 }
 
+// AuthorisePrompt autorises with the TV using the PROMPT method.
 func (tv *TV) AuthorisePrompt() (string, error) {
 	msg := Message{
 		Type:    RegisterMessageType,
@@ -122,10 +131,15 @@ func (tv *TV) AuthorisePrompt() (string, error) {
 	return key, nil
 }
 
+// Close closes the websocket connection to the TV.
 func (tv *TV) Close() error {
 	return tv.ws.Close()
 }
 
+// request makes a request to TV. It ensures a channel is available for responses
+// using the given Message.ID and makes the request. Responses from the TV are added
+// to the channel in the MessageHandler method, and read in this method. Responses
+// are vaildates before they are returned.
 func (tv *TV) request(msg *Message) (Message, error) {
 	ch := make(chan Message, 1)
 	tv.setupResponseChannel(msg.ID, ch)
@@ -156,12 +170,13 @@ func (tv *TV) request(msg *Message) (Message, error) {
 			}
 
 			return res, res.Validate()
-		case <-time.After(time.Second * 5):
+		case <-time.After(time.Second * 15):
 			return Message{}, errors.New("timeout")
 		}
 	}
 }
 
+// setupResponseChannel ensures a channel is available for the given Message ID responses.
 func (tv *TV) setupResponseChannel(id string, ch chan<- Message) {
 	tv.resMutex.Lock()
 	defer tv.resMutex.Unlock()
@@ -173,6 +188,7 @@ func (tv *TV) setupResponseChannel(id string, ch chan<- Message) {
 	tv.res[id] = ch
 }
 
+// teardownResponseChannel removes the channels used by the given Message ID.
 func (tv *TV) teardownResponseChannel(id string) {
 	tv.resMutex.Lock()
 	defer tv.resMutex.Unlock()

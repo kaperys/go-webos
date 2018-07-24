@@ -5,24 +5,21 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
 
-	webos "gitlab.com/kaperys/go-webos"
+	webos "github.com/kaperys/go-webos"
 )
 
 func main() {
 	dialer := websocket.Dialer{
-		Proxy:            http.ProxyFromEnvironment,
 		HandshakeTimeout: 10 * time.Second,
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: true,
 		},
 		NetDial: (&net.Dialer{
-			Timeout:   time.Second * 5,
-			KeepAlive: time.Second * 30,
+			Timeout: time.Second * 5,
 		}).Dial,
 	}
 
@@ -36,9 +33,10 @@ func main() {
 
 	key, err := tv.AuthorisePrompt()
 	if err != nil {
-		log.Fatalf("could not authoise using prompt: %v", err)
+		log.Fatalf("could not authorise using prompt: %v", err)
 	}
 
+	// this key can be used for future request to the TV using the AuthoriseClientKey method
 	fmt.Println("Client Key:", key)
 
 	tv.Notification("📺👌")

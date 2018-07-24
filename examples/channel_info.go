@@ -5,24 +5,21 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
 
-	webos "gitlab.com/kaperys/go-webos"
+	webos "github.com/kaperys/go-webos"
 )
 
 func main() {
 	dialer := websocket.Dialer{
-		Proxy:            http.ProxyFromEnvironment,
 		HandshakeTimeout: 10 * time.Second,
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: true,
 		},
 		NetDial: (&net.Dialer{
-			Timeout:   time.Second * 5,
-			KeepAlive: time.Second * 30,
+			Timeout: time.Second * 5,
 		}).Dial,
 	}
 
