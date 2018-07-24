@@ -1,6 +1,6 @@
-# Go WebOS
+# Go WebOS 📺
 
-A small Go library for controlling WebOS TVs. Tested on LG webOS TV UH668V (webOS version 05.30.20).
+A small Go library for interaction with webOS enabled TVs. Tested on LG webOS TV UH668V (webOS version 05.30.20).
 
 ```go
 dialer := websocket.Dialer{
@@ -10,9 +10,9 @@ dialer := websocket.Dialer{
     NetDial: (&net.Dialer{Timeout: time.Second * 5}).Dial,
 }
 
-tv, err := webos.NewTV(&dialer, "192.168.1.67")
+tv, err := webos.NewTV(&dialer, "<tv-ipv4-address>")
 if err != nil {
-    log.Fatalf("could not dial: %v", err)
+    log.Fatalf("could not dial TV: %v", err)
 }
 defer tv.Close()
 
@@ -29,9 +29,10 @@ if err != nil {
 // AuthoriseClientKey(<key>) method, instead of AuthorisePrompt()
 fmt.Println("Client Key:", key)
 
+// see commands.go for available methods
 tv.Notification("📺👌")
 ```
 
 See [examples](examples/) for usage.
 
-Inspired by [lgtv.js](https://github.com/msloth/lgtv.js), [go-lgtv](https://github.com/dhickie/go-lgtv) and [webostv](https://github.com/snabb/webostv).
+🌟 Inspired by [lgtv.js](https://github.com/msloth/lgtv.js), [go-lgtv](https://github.com/dhickie/go-lgtv) and [webostv](https://github.com/snabb/webostv).
