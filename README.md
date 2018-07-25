@@ -2,6 +2,8 @@
 
 A small Go library for interaction with webOS enabled TVs. Tested on LG webOS TV UH668V (webOS version 05.30.20).
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/kaperys/go-webos)](https://goreportcard.com/report/github.com/kaperys/go-webos)
+
 ```go
 dialer := websocket.Dialer{
     HandshakeTimeout: 10 * time.Second,

@@ -141,8 +141,7 @@ func (tv *TV) Close() error {
 // to the channel in the MessageHandler method, and read in this method. Responses
 // are vaildates before they are returned.
 func (tv *TV) request(msg *Message) (Message, error) {
-	ch := make(chan Message, 1)
-	tv.setupResponseChannel(msg.ID, ch)
+	ch := tv.setupResponseChannel(msg.ID)
 	defer tv.teardownResponseChannel(msg.ID)
 
 	b, err := json.Marshal(msg)
@@ -177,7 +176,7 @@ func (tv *TV) request(msg *Message) (Message, error) {
 }
 
 // setupResponseChannel ensures a channel is available for the given Message ID responses.
-func (tv *TV) setupResponseChannel(id string, ch chan<- Message) {
+func (tv *TV) setupResponseChannel(id string) chan Message {
 	tv.resMutex.Lock()
 	defer tv.resMutex.Unlock()
 
@@ -185,7 +184,9 @@ func (tv *TV) setupResponseChannel(id string, ch chan<- Message) {
 		tv.res = make(map[string]chan<- Message)
 	}
 
+	ch := make(chan Message, 1)
 	tv.res[id] = ch
+	return ch
 }
 
 // teardownResponseChannel removes the channels used by the given Message ID.
