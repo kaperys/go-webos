@@ -22,7 +22,7 @@ const RequestMessageType MessageType = "request"
 // ResponseMessageType is returned by the TV in response to a request.
 const ResponseMessageType MessageType = "response"
 
-// Message represents the JSON message format used in request and respones to
+// Message represents the JSON message format used in request and responses to
 // and from the TV.
 type Message struct {
 	Type    MessageType `json:"type,omitempty"`
