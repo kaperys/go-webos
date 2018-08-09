@@ -7,20 +7,22 @@ import (
 // MessageType is the type sent to and returned by the TV in the `type` field.
 type MessageType string
 
-// ErrorMessageType is returned by the TV when an error has occurred.
-const ErrorMessageType MessageType = "error"
+const (
+	// ErrorMessageType is returned by the TV when an error has occurred.
+	ErrorMessageType MessageType = "error"
 
-// RegisterMessageType is sent to the TV in a registration request.
-const RegisterMessageType MessageType = "register"
+	// RegisterMessageType is sent to the TV in a registration request.
+	RegisterMessageType MessageType = "register"
 
-// RegisteredMessageType is returned by the TV in response to a registration request.
-const RegisteredMessageType MessageType = "registered"
+	// RegisteredMessageType is returned by the TV in response to a registration request.
+	RegisteredMessageType MessageType = "registered"
 
-// RequestMessageType is sent to the TV when issuing Commands.
-const RequestMessageType MessageType = "request"
+	// RequestMessageType is sent to the TV when issuing Commands.
+	RequestMessageType MessageType = "request"
 
-// ResponseMessageType is returned by the TV in response to a request.
-const ResponseMessageType MessageType = "response"
+	// ResponseMessageType is returned by the TV in response to a request.
+	ResponseMessageType MessageType = "response"
+)
 
 // Message represents the JSON message format used in request and responses to
 // and from the TV.

@@ -3,11 +3,20 @@ package webos
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
+)
+
+var (
+	// Protocol is the protocol used to connect to the TV.
+	Protocol = "wss"
+
+	// Port is the port used to connect to the TV.
+	Port = 3001
 )
 
 // TV represents the TV. It contains the websocket connection, necessary channels
@@ -21,8 +30,9 @@ type TV struct {
 }
 
 // NewTV dials the socket and returns a pointer to a new TV.
-func NewTV(dialer *websocket.Dialer, addr string) (*TV, error) {
-	ws, resp, err := dialer.Dial(fmt.Sprintf("wss://%s:3001", addr), nil)
+func NewTV(dialer *websocket.Dialer, ip string) (*TV, error) {
+	addr := fmt.Sprintf("%s://%s:%d", Protocol, ip, Port)
+	ws, resp, err := dialer.Dial(addr, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -198,4 +208,15 @@ func (tv *TV) teardownResponseChannel(id string) {
 		close(ch)
 		delete(tv.res, id)
 	}
+}
+
+// requestID returns a random 8 character string. Requests and Responses sent to and from
+// the TV are linked by this ID.
+func requestID() string {
+	rs := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+	b := make([]rune, 8)
+	for i := range b {
+		b[i] = rs[rand.Intn(len(rs))]
+	}
+	return string(b)
 }

@@ -5,79 +5,81 @@ import "github.com/mitchellh/mapstructure"
 // Command is the type used by tv.Command to interact with the TV.
 type Command string
 
-// APIServiceListCommand lists the API services available on the TV.
-const APIServiceListCommand Command = "ssap://api/getServiceList"
+const (
+	// APIServiceListCommand lists the API services available on the TV.
+	APIServiceListCommand Command = "ssap://api/getServiceList"
 
-// ApplicationManagerForegroundAppCommand returns information about the forgeground app.
-const ApplicationManagerForegroundAppCommand Command = "ssap://com.webos.applicationManager/getForegroundAppInfo"
+	// ApplicationManagerForegroundAppCommand returns information about the forgeground app.
+	ApplicationManagerForegroundAppCommand Command = "ssap://com.webos.applicationManager/getForegroundAppInfo"
 
-// AudioGetVolumeCommand returns information about the TV's configured audio output volume.
-const AudioGetVolumeCommand Command = "ssap://audio/getVolume"
+	// AudioGetVolumeCommand returns information about the TV's configured audio output volume.
+	AudioGetVolumeCommand Command = "ssap://audio/getVolume"
 
-// AudioSetVolumeCommand sets the TV's configured audio output volume.
-const AudioSetVolumeCommand Command = "ssap://audio/setVolume"
+	// AudioSetVolumeCommand sets the TV's configured audio output volume.
+	AudioSetVolumeCommand Command = "ssap://audio/setVolume"
 
-// AudioVolumeDownCommand decrements the TV's configured audio output volume.
-const AudioVolumeDownCommand Command = "ssap://audio/volumeDown"
+	// AudioVolumeDownCommand decrements the TV's configured audio output volume.
+	AudioVolumeDownCommand Command = "ssap://audio/volumeDown"
 
-// AudioVolumeStatusCommand returns information about the TV's configured audio output volume.
-// Same as AudioGetVolumeCommand.
-const AudioVolumeStatusCommand Command = "ssap://audio/getVolume"
+	// AudioVolumeStatusCommand returns information about the TV's configured audio output volume.
+	// Same as AudioGetVolumeCommand.
+	AudioVolumeStatusCommand Command = "ssap://audio/getVolume"
 
-// AudioVolumeUpCommand increments the TV's configured audio output volume.
-const AudioVolumeUpCommand Command = "ssap://audio/volumeUp"
+	// AudioVolumeUpCommand increments the TV's configured audio output volume.
+	AudioVolumeUpCommand Command = "ssap://audio/volumeUp"
 
-// AudioVolumeSetMuteCommand sets/toggles muting the TV's configured audio output.
-const AudioVolumeSetMuteCommand Command = "ssap://audio/setMute"
+	// AudioVolumeSetMuteCommand sets/toggles muting the TV's configured audio output.
+	AudioVolumeSetMuteCommand Command = "ssap://audio/setMute"
 
-// MediaControlFastForwardCommand fast forwards the current media.
-const MediaControlFastForwardCommand Command = "ssap://media.controls/fastForward"
+	// MediaControlFastForwardCommand fast forwards the current media.
+	MediaControlFastForwardCommand Command = "ssap://media.controls/fastForward"
 
-// MediaControlPauseCommand pauses the current media.
-const MediaControlPauseCommand Command = "ssap://media.controls/pause"
+	// MediaControlPauseCommand pauses the current media.
+	MediaControlPauseCommand Command = "ssap://media.controls/pause"
 
-// MediaControlPlayCommand plays or resumes the current media.
-const MediaControlPlayCommand Command = "ssap://media.controls/play"
+	// MediaControlPlayCommand plays or resumes the current media.
+	MediaControlPlayCommand Command = "ssap://media.controls/play"
 
-// MediaControlRewindCommand rewinds the current media.
-const MediaControlRewindCommand Command = "ssap://media.controls/rewind"
+	// MediaControlRewindCommand rewinds the current media.
+	MediaControlRewindCommand Command = "ssap://media.controls/rewind"
 
-// MediaControlStopCommand stops the current media.
-const MediaControlStopCommand Command = "ssap://media.controls/stop"
+	// MediaControlStopCommand stops the current media.
+	MediaControlStopCommand Command = "ssap://media.controls/stop"
 
-// SystemLauncherCloseCommand closes a given application.
-const SystemLauncherCloseCommand Command = "ssap://system.launcher/close"
+	// SystemLauncherCloseCommand closes a given application.
+	SystemLauncherCloseCommand Command = "ssap://system.launcher/close"
 
-// SystemLauncherGetAppStateCommand returns information about the given application state.
-const SystemLauncherGetAppStateCommand Command = "ssap://system.launcher/getAppState"
+	// SystemLauncherGetAppStateCommand returns information about the given application state.
+	SystemLauncherGetAppStateCommand Command = "ssap://system.launcher/getAppState"
 
-// SystemLauncherLaunchCommand launches the given application.
-const SystemLauncherLaunchCommand Command = "ssap://system.launcher/launch"
+	// SystemLauncherLaunchCommand launches the given application.
+	SystemLauncherLaunchCommand Command = "ssap://system.launcher/launch"
 
-// SystemLauncherOpenCommand opens a previously launched application.
-const SystemLauncherOpenCommand Command = "ssap://system.launcher/open"
+	// SystemLauncherOpenCommand opens a previously launched application.
+	SystemLauncherOpenCommand Command = "ssap://system.launcher/open"
 
-// SystemNotificationsCreateToastCommand creates a "toast" notification.
-const SystemNotificationsCreateToastCommand Command = "ssap://system.notifications/createToast"
+	// SystemNotificationsCreateToastCommand creates a "toast" notification.
+	SystemNotificationsCreateToastCommand Command = "ssap://system.notifications/createToast"
 
-// SystemTurnOffCommand turns the TV off.
-const SystemTurnOffCommand Command = "ssap://system/turnOff"
+	// SystemTurnOffCommand turns the TV off.
+	SystemTurnOffCommand Command = "ssap://system/turnOff"
 
-// TVChannelDownCommand changes the channel down.
-const TVChannelDownCommand Command = "ssap://tv/channelDown"
+	// TVChannelDownCommand changes the channel down.
+	TVChannelDownCommand Command = "ssap://tv/channelDown"
 
-// TVChannelListCommand returns information about the available channels.
-const TVChannelListCommand Command = "ssap://tv/getChannelList"
+	// TVChannelListCommand returns information about the available channels.
+	TVChannelListCommand Command = "ssap://tv/getChannelList"
 
-// TVChannelUpCommand changes the channel up.
-const TVChannelUpCommand Command = "ssap://tv/channelUp"
+	// TVChannelUpCommand changes the channel up.
+	TVChannelUpCommand Command = "ssap://tv/channelUp"
 
-// TVCurrentChannelCommand returns information about the current channel.
-const TVCurrentChannelCommand Command = "ssap://tv/getCurrentChannel"
+	// TVCurrentChannelCommand returns information about the current channel.
+	TVCurrentChannelCommand Command = "ssap://tv/getCurrentChannel"
 
-// TVCurrentChannelProgramCommand returns information about the current program playing on
-// the current channel.
-const TVCurrentChannelProgramCommand Command = "ssap://tv/getChannelProgramInfo"
+	// TVCurrentChannelProgramCommand returns information about the current program playing on
+	// the current channel.
+	TVCurrentChannelProgramCommand Command = "ssap://tv/getChannelProgramInfo"
+)
 
 // ServiceList returns information about the available services.
 func (tv *TV) ServiceList() (*ServiceList, error) {
