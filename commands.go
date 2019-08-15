@@ -1,6 +1,8 @@
 package webos
 
-import "github.com/mitchellh/mapstructure"
+import (
+	"github.com/mitchellh/mapstructure"
+)
 
 // Command is the type used by tv.Command to interact with the TV.
 type Command string
@@ -79,6 +81,10 @@ const (
 	// TVCurrentChannelProgramCommand returns information about the current program playing on
 	// the current channel.
 	TVCurrentChannelProgramCommand Command = "ssap://tv/getChannelProgramInfo"
+
+	GetPointerInputSocketCommand Command = "ssap://com.webos.service.networkinput/getPointerInputSocket"
+
+	KeyEnterCommand Command = "ssap://com.webos.service.ime/sendEnterKey"
 )
 
 // ServiceList returns information about the available services.
@@ -260,4 +266,80 @@ func (tv *TV) CurrentChannel() (Message, error) {
 //  @todo implement a Program type. This doesn't work on my TV.
 func (tv *TV) CurrentProgram() (Message, error) {
 	return tv.Command(TVCurrentChannelProgramCommand, nil)
+}
+
+func (tv *TV) KeyUp() error {
+	if tv.input == nil {
+		var err error
+		tv.input, err = tv.createInput()
+		if err != nil {
+			return err
+		}
+	}
+	tv.input.SendButton("UP")
+	return nil
+}
+
+func (tv *TV) KeyDown() error {
+	if tv.input == nil {
+		var err error
+		tv.input, err = tv.createInput()
+		if err != nil {
+			return err
+		}
+	}
+	tv.input.SendButton("DOWN")
+	return nil
+}
+
+func (tv *TV) KeyLeft() error {
+	if tv.input == nil {
+		var err error
+		tv.input, err = tv.createInput()
+		if err != nil {
+			return err
+		}
+	}
+	tv.input.SendButton("LEFT")
+	return nil
+}
+
+func (tv *TV) KeyRight() error {
+	if tv.input == nil {
+		var err error
+		tv.input, err = tv.createInput()
+		if err != nil {
+			return err
+		}
+	}
+	tv.input.SendButton("RIGHT")
+	return nil
+}
+
+func (tv *TV) KeyOk() (Message, error) {
+	return tv.Command(KeyEnterCommand, nil)
+}
+
+func (tv *TV) KeyBack() error {
+	if tv.input == nil {
+		var err error
+		tv.input, err = tv.createInput()
+		if err != nil {
+			return err
+		}
+	}
+	tv.input.SendButton("BACK")
+	return nil
+}
+
+func (tv *TV) KeyHome() error {
+	if tv.input == nil {
+		var err error
+		tv.input, err = tv.createInput()
+		if err != nil {
+			return err
+		}
+	}
+	tv.input.SendButton("HOME")
+	return nil
 }

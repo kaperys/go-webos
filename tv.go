@@ -27,6 +27,7 @@ type TV struct {
 
 	res      map[string]chan<- Message
 	resMutex sync.Mutex
+	input    *Input
 }
 
 // NewTV dials the socket and returns a pointer to a new TV.
@@ -40,8 +41,8 @@ func NewTV(dialer *websocket.Dialer, ip string) (*TV, error) {
 	if err = resp.Body.Close(); err != nil {
 		return nil, err
 	}
-
-	return &TV{ws: ws}, nil
+	tv := &TV{ws: ws}
+	return tv, nil
 }
 
 // Command executes a Command on the TV.
@@ -143,6 +144,10 @@ func (tv *TV) AuthorisePrompt() (string, error) {
 
 // Close closes the websocket connection to the TV.
 func (tv *TV) Close() error {
+	if tv.input != nil {
+		tv.input.Close()
+		tv.input = nil
+	}
 	return tv.ws.Close()
 }
 
@@ -219,4 +224,25 @@ func requestID() string {
 		b[i] = rs[rand.Intn(len(rs))]
 	}
 	return string(b)
+}
+
+// createInput create if needed an input
+func (tv *TV) createInput() (*Input, error) {
+	msg := Message{
+		Type: RequestMessageType,
+		ID:   requestID(),
+		URI:  GetPointerInputSocketCommand,
+	}
+	res, err := tv.request(&msg)
+	if err != nil {
+		return nil, fmt.Errorf("could not make request: %v", err)
+	}
+	var socketPath string
+	socketPath = fmt.Sprintf("%s", res.Payload["socketPath"])
+
+	input, err := NewInput(socketPath)
+	if err != nil {
+		return nil, fmt.Errorf("could not dial: %v", err)
+	}
+	return input, nil
 }

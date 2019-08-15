@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net"
 	"time"
@@ -31,13 +30,11 @@ func main() {
 
 	go tv.MessageHandler()
 
-	key, err := tv.AuthorisePrompt()
-	if err != nil {
-		log.Fatalf("could not authorise using prompt: %v", err)
+	if err = tv.AuthoriseClientKey("284d99ac14a106d1004557321dfd7d86"); err != nil {
+		log.Fatalf("could not authoise using client key: %v", err)
 	}
 
-	// this key can be used for future request to the TV using the AuthoriseClientKey method
-	fmt.Println("Client Key:", key)
+	tv.KeyDown()
 
-	tv.Notification("📺👌")
+	tv.KeyOk()
 }
